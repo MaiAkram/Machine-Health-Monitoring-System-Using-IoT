@@ -1,0 +1,36 @@
+#include <LiquidCrystal.h>
+#include <SoftwareSerial.h>
+
+SoftwareSerial UART(0, 1);
+
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+char c;
+
+void setup() {
+// Open serial communications and wait for port to open:
+  Serial.begin(9600);
+  UART.begin(9600);
+
+  while (!Serial) {
+  }
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("Machine Health");
+  lcd.setCursor(1, 1);
+  lcd.print("Monitoring Sys");
+  delay(1000);
+}
+
+void loop() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("MHMS");
+  lcd.setCursor(0, 1);
+  while(UART.available()!=0){
+    c = UART.read();
+    Serial.print(c);
+    lcd.print(c);
+  }
+  delay(1000);
+}
